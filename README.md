@@ -1,105 +1,65 @@
-# Swarmulator: A Swarm Simulation with Transformer Architecture
+# Swarmalator 
 
-## Table of Contents
-- Introduction
-- Swarmulator Architecture
-- Algorithmic Pseudocode
-- Usage
-- Conclusion
+Swarmalators are a hybrid swarm oscillator system, combining features of both swarming (particles that align their spatial motion) and oscillators (units that synchronize their phase). This repository provides an implementation of the swarmalator model in a 3D environment using PyTorch.
 
-## Introduction
-The Swarmulator is a computational model designed to simulate the behavior of a swarm of agents using modern attention-based Transformer architecture. Each agent in the swarm has a position (`xi`) and orientation (`oi`). The model incorporates interactions between the agents to dynamically evolve their states over time.
 
-## Swarmulator Architecture
+# Install
 
-### Basic Components:
+```bash
 
-1. **State Variables**:
-    - `xi`: Represents the position of the agent in a `D` dimensional space.
-    - `oi`: Represents the orientation of the agent.
 
-2. **Transformer Components**:
-    - **Attention Mechanism**: Uses multi-head attention to compute the evolution of the agents based on their interactions with each other.
-
-### Initialization:
-The Swarmulator class is initialized with several parameters:
-
-- `D`: The dimensionality of the agents. It defines the space in which the agents exist.
-- `heads`: The number of heads in the multi-head attention mechanism.
-- `N`: The number of agents in the swarm.
-- Other parameters influencing the behavior and interactions of the agents include `J`, `a`, `β`, `y`, `εa`, `εr`, and `R`.
-
-Upon initialization, random positions and orientations are assigned to each agent. The attention mechanisms specific to position (`xi`) and orientation (`oi`) are also set up.
-
-### Transformer Integration:
-To model the interactions between agents, we utilize the transformer's attention mechanism. The idea is to allow each agent to 'pay attention' to other agents when deciding its next state. This is implemented using the multi-head attention mechanism from the Transformer architecture.
-
-For positions (`xi`) and orientations (`oi`), we have distinct attention mechanisms, thus allowing the system to model different interaction dynamics for position and orientation.
-
-## Algorithmic Pseudocode
 
 ```
-Class Swarmulator:
-    
-    INIT(D, heads, N, J, a, β, y, εa, εr, R):
-        Set state dimensions, D
-        Set number of agents, N
-        Initialize agent-specific parameters: J, a, β, y, εa, εr, R
-        Initialize agent states: xi, oi
-        
-        Setup attention mechanisms for xi and oi
 
-    FUNCTION evolution_of_xi:
-        Use attention mechanism on xi
-        RETURN updated xi
+## Overview
 
-    FUNCTION evolution_of_oi:
-        Use attention mechanism on oi
-        RETURN updated oi
+At the heart of the model are two main components for each swarmalator: 
+1. **Spatial Position (`xi`)**: Represents where the swarmalator is in a 3D space.
+2. **Phase/Orientation (`sigma_i`)**: Defines the state or phase of the swarmalator.
 
-    FUNCTION RK4_step(y, evolution_func, dt):
-        Compute k1, k2, k3, k4 using the evolution function
-        UPDATE y based on the computed values
-        RETURN y
+The dynamics of each swarmalator are driven by interactions with its neighbors. These interactions are based on their relative spatial distances and differences in their phases.
 
-    FUNCTION simulation(num_steps):
-        FOR each step in num_steps:
-            UPDATE xi using RK4_step
-            UPDATE oi using RK4_step
-            Normalize oi
+## Dynamics Explained
 
-END Class
+The dynamics of the swarmalators are governed by two main equations:
 
-```
+1. For the spatial position (`xi`):
+    - Swarmalators are attracted or repelled based on the difference in their phases.
+    - They also experience a self-propelling force and a damping on high velocities.
+  
+2. For the phase/orientation (`sigma_i`):
+    - The phase changes based on the relative spatial positioning of the swarmalators.
+    - There's also an intrinsic phase precession and a nonlinearity which can cause the phase to wrap around.
+
+Using the Runge-Kutta 4th order method (RK4), the system numerically integrates these dynamics over time, leading to the emergent behaviors of the swarmalators.
+
+## Visualization
+
+In the visualization, you will witness:
+- A 3D cube that encapsulates the world of swarmalators.
+- `N` points inside this 3D space, each representing a swarmalator. The movements and dynamics of these swarmalators are based on the aforementioned interactions.
+- A mesmerizing dance of points as they evolve over time, showcasing various patterns, clusters, or scattered behaviors.
+
+## Parameters
+
+The behavior of swarmalators can be fine-tuned using several parameters:
+- `N`: Number of swarmalators.
+- `J, alpha, beta, gamma, epsilon_a, epsilon_r, R`: Parameters that govern the strength and nature of interactions and dynamics.
+- `D`: Dimensionality of the phase/orientation.
 
 ## Usage
 
-### Initialization:
-
-To initialize the Swarmulator, provide the required parameters. For instance:
+To simulate the swarmalators, adjust the parameters as desired and run the provided script. Post-simulation, the final positions and phases of the swarmalators are printed, and the visualization can be observed.
 
 ```python
-swarm = Swarmulator(N=100, D=3, heads=4)
-```
-
-This initializes a swarm with 100 agents in a 3-dimensional space using an attention mechanism with 4 heads.
-
-### Running a Simulation:
-
-To run the simulation for a certain number of steps:
-
-```python
-swarm.simulation(num_steps=1000)
-```
-
-You can then access the final positions and orientations of the agents using:
-
-```python
-print(swarm.xi)
-print(swarm.oi)
+N = 100
+J, alpha, beta, gamma, epsilon_a, epsilon_r, R = [0.1]*7
+D = 3
+xi, sigma_i = simulate_swarmalators(N, J, alpha, beta, gamma, epsilon_a, epsilon_r, R, D)
+print(xi[-1], sigma_i[-1])
 ```
 
 ## Conclusion
 
-Swarmulator offers a unique approach to simulating swarm dynamics by integrating modern attention-based mechanisms from the Transformer architecture. This allows the model to capture complex interactions between agents in a computationally efficient manner. Whether you're researching swarm behaviors, designing swarm robotics, or just curious about the application of Transformer architectures in unconventional scenarios, Swarmulator provides a robust framework to kickstart your experiments.
+Swarmalators provide a unique and intriguing insight into systems that exhibit both swarming and synchronization behaviors. By studying and visualizing such models, we can gain a better understanding of complex systems in nature and potentially apply these insights to engineering and technological domains.
 

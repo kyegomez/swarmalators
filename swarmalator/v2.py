@@ -31,7 +31,6 @@ class SwarmalatorModel(nn.Module):
         orientation_memory = self.transformer_encoder(
             self.orientations.unsqueeze(1), mask=src_mask
         )
-
         # Using transformer decoder to get updated positions and orientations
         updated_positions = self.transformer_decoder(
             self.positions.unsqueeze(1),
