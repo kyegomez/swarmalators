@@ -1,14 +1,83 @@
+![Agora banner](agorabanner.png)
+
+
 # Swarmalator 
 
 Swarmalators are a hybrid swarm oscillator system, combining features of both swarming (particles that align their spatial motion) and oscillators (units that synchronize their phase). This repository provides an implementation of the swarmalator model in a 3D environment using PyTorch.
 
 
 # Install
+`pip install swarmalator`
 
-```bash
+# Usage
+There are 2 verisons, a verison close to the original paper's implementation and a very experimental verison with attn.
+
+- Implementation From paper, with a cool animation
+
+```python
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from swarmalator import simulate_swarmalators
+
+# Example usage:
+N = 100
+J, alpha, beta, gamma, epsilon_a, epsilon_r, R = [0.1] * 7
+D = 3  # Ensure D is an integer
+xi, sigma_i = simulate_swarmalators(
+    N, J, alpha, beta, gamma, epsilon_a, epsilon_r, R, D
+)
+print(xi[-1], sigma_i[-1])
 
 
+def visualize_swarmalators(results_xi):
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111, projection="3d")
 
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(-2, 2)
+    ax.set_zlim(-2, 2)
+
+    # Initialize the scatter plot
+    scatter = ax.scatter([], [], [])
+
+    def init():
+        scatter._offsets3d = ([], [], [])
+        return (scatter,)
+
+    def update(num):
+        ax.view_init(30, 0.3 * num)
+        x_data, y_data, z_data = results_xi[num].t()
+        scatter._offsets3d = (x_data, y_data, z_data)
+        return (scatter,)
+
+    ani = FuncAnimation(fig, update, frames=len(results_xi), init_func=init, blit=False)
+
+    plt.show()
+
+
+# Call the visualization function
+visualize_swarmalators(xi)
+```
+
+- Implementation with attn, params could use tuning, with a visualization suite as well
+```python
+import torch
+from swarmalator import Swarmulator
+
+
+# Initialize the Swarmulator
+N = 100  # Number of agents
+D = 100  # Dimensionality of agents
+swarm = Swarmulator(N=N, D=D, heads=5)
+
+# Run a simple forward pass
+swarm.simulation(num_steps=10)
+
+# Print the final positions and orientations of the swarm agents
+print("Final positions (xi) of the agents:")
+print(swarm.xi)
+print("\nFinal orientations (oi) of the agents:")
+print(swarm.oi)
 ```
 
 ## Overview
@@ -63,3 +132,15 @@ print(xi[-1], sigma_i[-1])
 
 Swarmalators provide a unique and intriguing insight into systems that exhibit both swarming and synchronization behaviors. By studying and visualizing such models, we can gain a better understanding of complex systems in nature and potentially apply these insights to engineering and technological domains.
 
+
+
+# Citation
+```bibtex
+@misc{2308.03803,
+Author = {Akash Yadav and Krishnanand J and V. K. Chandrasekar and Wei Zou and Jürgen Kurths and D. V. Senthilkumar},
+Title = {Exotic swarming dynamics of high-dimensional swarmalators},
+Year = {2023},
+Eprint = {arXiv:2308.03803},
+}
+
+```
