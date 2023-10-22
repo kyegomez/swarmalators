@@ -2,8 +2,21 @@ import torch
 import random
 import torch.nn as nn
 
+
 class Swarmulator:
-    def __init__(self, D=3, heads: int = 4, N=100, J=None, a=1, β=3, y=1, εa=None, εr=None, R=None):
+    def __init__(
+        self,
+        D=3,
+        heads: int = 4,
+        N=100,
+        J=None,
+        a=1,
+        β=3,
+        y=1,
+        εa=None,
+        εr=None,
+        R=None,
+    ):
         self.D = D
         self.N = N
         self.J = J if J is not None else random.uniform(-1, 1)
@@ -16,7 +29,7 @@ class Swarmulator:
         self.xi = torch.randn(N, D)
         self.oi = torch.randn(N, D)
         self.oi /= torch.norm(self.oi, dim=1).unsqueeze(1)
-        
+
         # Transformer Components
         self.attention_xi = nn.MultiheadAttention(embed_dim=D, num_heads=self.heads)
         self.attention_oi = nn.MultiheadAttention(embed_dim=D, num_heads=self.heads)
@@ -43,19 +56,4 @@ class Swarmulator:
             # Normalizing oi to ensure it's a unit vector
             self.oi /= torch.norm(self.oi, dim=1).unsqueeze(1)
 
-import torch
 
-
-# Initialize the Swarmulator
-N = 100  # Number of agents
-D = 100  # Dimensionality of agents
-swarm = Swarmulator(N=N, D=D, heads=5)
-
-# Run a simple forward pass
-swarm.simulation(num_steps=10)
-
-# Print the final positions and orientations of the swarm agents
-print("Final positions (xi) of the agents:")
-print(swarm.xi)
-print("\nFinal orientations (oi) of the agents:")
-print(swarm.oi)
