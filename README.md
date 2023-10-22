@@ -103,4 +103,3 @@ print(swarm.oi)
 
 Swarmulator offers a unique approach to simulating swarm dynamics by integrating modern attention-based mechanisms from the Transformer architecture. This allows the model to capture complex interactions between agents in a computationally efficient manner. Whether you're researching swarm behaviors, designing swarm robotics, or just curious about the application of Transformer architectures in unconventional scenarios, Swarmulator provides a robust framework to kickstart your experiments.
 
-**Disclaimer**: This README provides an overview of the Swarmulator's architecture and usage. Depending on specific requirements and applications, you might need to fine-tune or adjust the model's parameters or architecture. Ensure to understand the underlying mechanisms and assumptions before applying this to real-world scenarios.

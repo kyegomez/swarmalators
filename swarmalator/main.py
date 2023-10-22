@@ -55,5 +55,3 @@ class Swarmulator:
             self.oi = self.RK4_step(self.oi, self.evolution_of_oi)
             # Normalizing oi to ensure it's a unit vector
             self.oi /= torch.norm(self.oi, dim=1).unsqueeze(1)
-
-
